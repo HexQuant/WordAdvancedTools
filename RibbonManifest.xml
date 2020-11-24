@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui">
+	<ribbon startFromScratch="false">
+		<tabs>
+			<tab id="watTab" label="Advanced Tools">
+				<group id="RevisionGroup" getLabel="GetLabel">
+					<button id="NewCustomButton" image="IDB_PNG1" size="large" label="Search Bing" onAction="ButtonClicked"/>
+					<toggleButton id="LinkRevisionButton" onAction="OnLinkRevisionButton" size="large" getLabel="GetLabel" getImage="GetImage" getScreentip="GetScreentip"/>
+					<separator id="RevisionSeparator"/> 
+					<button id="RemoveAllRevisionButton" onAction="OnRemoveAllRevisionButton" size="large" getLabel="GetLabel" getImage="GetImage" getScreentip="GetScreentip"/>
+					<dialogBoxLauncher>
+						<button id="RevisionSettingsButton" onAction="OnRevisionSettingsButton" getLabel="GetLabel" getScreentip="GetScreentip" />
+					</dialogBoxLauncher>
+				</group>
+				<group id="HelpGroup" getLabel="GetLabel">
+					<button id="AboutButton" onAction="OnAboutButton" size="large" getLabel="GetLabel" getImage="GetImage2" getScreentip="GetScreentip"/>
+				</group>
+			</tab>
+		</tabs>
+	</ribbon>
+</customUI>

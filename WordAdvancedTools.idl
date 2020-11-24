@@ -1,0 +1,58 @@
+// WordAdvancedTools.idl : IDL source for WordAdvancedTools
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (WordAdvancedTools.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(fd2efaae-869d-457a-8fb9-b33833e9553c),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IConnect : IDispatch
+{
+};
+
+[
+	uuid(04183b17-6eb6-4848-9c5f-1825f7d58a6a),
+	version(1.0),
+]
+library WordAdvancedToolsLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(f6fb665a-c3ff-441b-94ab-027ab20c4f34)
+	]
+	coclass Connect
+	{
+		[default] interface IRibbonCallback; //prev. IConnect;
+	};
+
+
+};
+[
+	object,
+	uuid(CE895442-9981-4315-AA85-4B9A5C7739D8),
+	dual,
+	nonextensible,
+	helpstring("IRibbonCallback Interface"),
+	pointer_default(unique)
+]
+interface IRibbonCallback : IDispatch {
+	//[id(42), helpstring("Button Callback")]
+	HRESULT OnAddRevisionButton([in]IDispatch* ribbonControl);
+	HRESULT OnRevisionSettingsButton([in]IDispatch* ribbonControl);
+	HRESULT OnRemoveAllRevisionButton([in]IDispatch* ribbonControl);
+	HRESULT GetLabel([in]IDispatch* ribbonControl, [out, retval]BSTR* Label);
+	HRESULT GetImage([in]IDispatch* ribbonControl, [out, retval]IPictureDisp** ppdispImage);
+	HRESULT GetImage2([in]IDispatch* ribbonControl, [out, retval]IPictureDisp** ppdispImage);
+};
+
+
+
+import "shobjidl.idl";

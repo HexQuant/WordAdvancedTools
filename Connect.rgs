@@ -1,0 +1,50 @@
+HKCR
+{
+	WordAdvancedTools.Connect.1 = s 'Connect class'
+	{
+		CLSID = s '{f6fb665a-c3ff-441b-94ab-027ab20c4f34}'
+	}
+	WordAdvancedTools.Connect = s 'Connect class'
+	{		
+		CurVer = s 'WordAdvancedTools.Connect.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {f6fb665a-c3ff-441b-94ab-027ab20c4f34} = s 'Connect class'
+		{
+			ProgID = s 'WordAdvancedTools.Connect.1'
+			VersionIndependentProgID = s 'WordAdvancedTools.Connect'
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			TypeLib = s '{04183b17-6eb6-4848-9c5f-1825f7d58a6a}'
+			Version = s '1.0'
+		}
+	}
+}
+HKCU
+{
+    NoRemove Software
+    {
+        NoRemove Microsoft
+        {
+            NoRemove Office
+            {
+                NoRemove Word
+                {
+                    NoRemove Addins
+                    {
+                        WordAdvancedTools.Connect
+                        {
+                            val Description = s 'Word Advanced Tools'
+                            val FriendlyName = s 'Word Advanced Tools'
+                            val LoadBehavior = d 3
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
