@@ -255,6 +255,10 @@ EXTERN_C const IID IID_IRibbonCallback;
             /* [in] */ IDispatch *ribbonControl,
             /* [retval][out] */ IPictureDisp **ppdispImage) = 0;
         
+        virtual HRESULT STDMETHODCALLTYPE GetImage3( 
+            /* [in] */ IDispatch *ribbonControl,
+            /* [retval][out] */ IPictureDisp **ppdispImage) = 0;
+        
     };
     
     
@@ -340,6 +344,11 @@ EXTERN_C const IID IID_IRibbonCallback;
             /* [in] */ IDispatch *ribbonControl,
             /* [retval][out] */ IPictureDisp **ppdispImage);
         
+        HRESULT ( STDMETHODCALLTYPE *GetImage3 )( 
+            IRibbonCallback * This,
+            /* [in] */ IDispatch *ribbonControl,
+            /* [retval][out] */ IPictureDisp **ppdispImage);
+        
         END_INTERFACE
     } IRibbonCallbackVtbl;
 
@@ -393,6 +402,9 @@ EXTERN_C const IID IID_IRibbonCallback;
 
 #define IRibbonCallback_GetImage2(This,ribbonControl,ppdispImage)	\
     ( (This)->lpVtbl -> GetImage2(This,ribbonControl,ppdispImage) ) 
+
+#define IRibbonCallback_GetImage3(This,ribbonControl,ppdispImage)	\
+    ( (This)->lpVtbl -> GetImage3(This,ribbonControl,ppdispImage) ) 
 
 #endif /* COBJMACROS */
 

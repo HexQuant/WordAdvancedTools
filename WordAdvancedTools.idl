@@ -51,6 +51,7 @@ interface IRibbonCallback : IDispatch {
 	HRESULT GetLabel([in]IDispatch* ribbonControl, [out, retval]BSTR* Label);
 	HRESULT GetImage([in]IDispatch* ribbonControl, [out, retval]IPictureDisp** ppdispImage);
 	HRESULT GetImage2([in]IDispatch* ribbonControl, [out, retval]IPictureDisp** ppdispImage);
+	HRESULT GetImage3([in]IDispatch* ribbonControl, [out, retval]IPictureDisp** ppdispImage);
 };
 
 

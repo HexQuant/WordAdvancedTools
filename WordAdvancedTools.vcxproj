@@ -219,6 +219,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="RevisionMacros.h" />
     <ClInclude Include="RevisionSettingsDialog.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WordAdvancedTools_i.h" />
@@ -245,6 +246,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="RevisionMacros.cpp" />
     <ClCompile Include="RevisionSettingsDialog.cpp" />
     <ClCompile Include="WordAdvancedTools.cpp" />
     <ClCompile Include="WordAdvancedTools_i.c">
@@ -277,8 +279,13 @@
     <Xml Include="RibbonManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\users\v_0ver\desktop\bitmap3.bmp" />
     <Image Include="..\..\Users\v_0ver\Desktop\RevisionPin.bmp" />
     <Image Include="..\..\Users\v_0ver\Downloads\RevisionAdd.png" />
+    <Image Include="Images\png_ico\Info.png" />
+    <Image Include="Images\png_ico\RevisionPin.png" />
+    <Image Include="Images\png_ico\RevisionRemove.png" />
+    <Image Include="Images\RevisionAdd.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

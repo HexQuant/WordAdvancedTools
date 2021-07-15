@@ -43,6 +43,9 @@
     <ClInclude Include="RevisionSettingsDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RevisionMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WordAdvancedTools.cpp">
@@ -61,6 +64,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RevisionSettingsDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RevisionMacros.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -93,6 +99,21 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\..\Users\v_0ver\Desktop\RevisionPin.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\RevisionAdd.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\users\v_0ver\desktop\bitmap3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\png_ico\RevisionRemove.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\png_ico\RevisionPin.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\png_ico\Info.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

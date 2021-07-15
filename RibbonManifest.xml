@@ -4,16 +4,16 @@
 		<tabs>
 			<tab id="watTab" label="Advanced Tools">
 				<group id="RevisionGroup" getLabel="GetLabel">
-					<button id="NewCustomButton" image="IDB_PNG1" size="large" label="Search Bing" onAction="ButtonClicked"/>
-					<toggleButton id="LinkRevisionButton" onAction="OnLinkRevisionButton" size="large" getLabel="GetLabel" getImage="GetImage" getScreentip="GetScreentip"/>
+					<button id="AddRevisionButton" size="large" label="Add Revision" onAction="OnAddRevisionButton" getImage="GetImage3"/>
+					<toggleButton id="LinkRevisionButton" onAction="OnLinkRevisionButton" size="large" getLabel="GetLabel" getImage="GetImage3" getScreentip="GetScreentip"/>
 					<separator id="RevisionSeparator"/> 
-					<button id="RemoveAllRevisionButton" onAction="OnRemoveAllRevisionButton" size="large" getLabel="GetLabel" getImage="GetImage" getScreentip="GetScreentip"/>
+					<button id="RemoveAllRevisionButton" onAction="OnRemoveAllRevisionButton" size="large" getLabel="GetLabel" getImage="GetImage3" getScreentip="GetScreentip"/>
 					<dialogBoxLauncher>
 						<button id="RevisionSettingsButton" onAction="OnRevisionSettingsButton" getLabel="GetLabel" getScreentip="GetScreentip" />
 					</dialogBoxLauncher>
 				</group>
 				<group id="HelpGroup" getLabel="GetLabel">
-					<button id="AboutButton" onAction="OnAboutButton" size="large" getLabel="GetLabel" getImage="GetImage2" getScreentip="GetScreentip"/>
+					<button id="AboutButton" onAction="OnAboutButton" size="large" getLabel="GetLabel" getImage="GetImage3" getScreentip="GetScreentip"/>
 				</group>
 			</tab>
 		</tabs>

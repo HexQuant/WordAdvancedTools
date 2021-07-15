@@ -91,16 +91,26 @@ public:
 		BSTR MyBstr;
 		CComPtr<_Document> Doc;
 		spApp->get_ActiveDocument(&Doc);
+		spApp->put_ScreenUpdating(FALSE);
+		CComPtr<_Document> d;
+			
+		spApp->get_ActiveDocument(&d);
+		CComPtr<Word::Styles> s;
+		CComPtr<Word::Style> s2;
+		d->get_Styles(&s);
+		auto tt = 2;
+		s->Add(SysAllocString(L"Test"), 0, &s2);
+		spApp->put_ScreenUpdating(TRUE);
 
-		CComPtr<Selection> selection;
-		spApp->get_Selection(&selection);
-		selection->get_Text(&MyBstr);
+		//CComPtr<Selection> selection;
+		//spApp->get_Selection(&selection);
+		//selection->get_Text(&MyBstr);
 
-		MessageBoxW(NULL, MyBstr, L"Native Addin", MB_OK);
-		Office::MsoLanguageID lang;
+		//MessageBoxW(NULL, MyBstr, L"Native Addin", MB_OK);
+		//Office::MsoLanguageID lang;
 
-		spApp->get_Language(&lang);
-		WORD lang2 = MAKELANGID(PRIMARYLANGID(lang), SUBLANG_DEFAULT);
+		//spApp->get_Language(&lang);
+		//WORD lang2 = MAKELANGID(PRIMARYLANGID(lang), SUBLANG_DEFAULT);
 
 		return S_OK;
 
@@ -146,6 +156,120 @@ public:
 		return ipStream;
 	}
 
+
+	STDMETHOD(GetImage3)(IDispatch* ribbonControl, IPictureDisp** pPicDisp)
+	//STDMETHOD(GetImage3) (BSTR* pBSTRImgName, IDispatch** pPicDisp)
+	{
+		PICTDESC	pt;
+		CComPtr<IPictureDisp> pPic;
+		HRESULT	hr = E_FAIL;
+		HRSRC	hRsrc = NULL;
+		HGLOBAL	hResource = NULL, hRes = NULL;
+		LPBYTE  lpBuffer = NULL;
+		UINT    resID = 0, uiSize = 0;
+		LPVOID lpResBuffer = NULL;
+		CComPtr<IStream> pStream;
+		CComBSTR bstrImg;
+		CImage	png;
+
+		//HMODULE hModule = _AtlBaseModule.GGetModuleInstance();
+
+		//ATLTRACE("%p - In loadImages, Image is %S\n", this, *pBSTRImgName);
+
+		//bstrImg.Attach(*pBSTRImgName);
+
+		//if (bstrImg == L"MyImage")
+
+		IRibbonControl* RibbonCtl = static_cast<IRibbonControl*>(ribbonControl);
+		CComBSTR bstr;
+		RibbonCtl->get_Id(&bstr);
+		if (bstr=="AddRevisionButton")
+		{	
+			resID = IDB_PNG1;
+		}
+		if (bstr=="RemoveAllRevisionButton")
+		{	
+			resID = IDB_PNG2;
+		}
+		if (bstr=="LinkRevisionButton")
+		{	
+			resID = IDB_PNG3;
+		}
+		if (bstr=="AboutButton")
+		{	
+			resID = IDB_PNG4;
+		}
+
+
+
+		if (resID != 0)
+		{
+			hRsrc = FindResource(_AtlBaseModule.GetResourceInstance(), MAKEINTRESOURCE(resID), _T("PNG"));
+
+			if (hRsrc == NULL)
+				return hr;
+
+			hResource = LoadResource(_AtlBaseModule.GetResourceInstance(), hRsrc);
+
+			if (hResource == NULL)
+				return hr;
+
+			lpBuffer = (LPBYTE)LockResource(hResource);
+
+			if (lpBuffer == NULL)
+				return hr;
+
+			uiSize = SizeofResource(_AtlBaseModule.GetResourceInstance(), hRsrc);
+
+			if (uiSize == 0)
+				return hr;
+
+			hRes = GlobalAlloc(GMEM_MOVEABLE, uiSize);
+
+			if (hRes != NULL)
+			{
+				lpResBuffer = GlobalLock(hRes);
+
+				if (lpResBuffer != NULL)
+				{
+					memcpy(lpResBuffer, lpBuffer, uiSize);
+
+					hr = CreateStreamOnHGlobal(hRes, TRUE, &pStream);
+
+					if (SUCCEEDED(hr))
+						hr = png.Load(pStream);
+
+					GlobalUnlock(hRes);
+				}
+
+				GlobalFree(hRes);
+			}
+
+			if (SUCCEEDED(hr))
+			{
+				SecureZeroMemory(&pt, sizeof(pt));
+
+				pt.cbSizeofstruct = sizeof(pt);
+
+				pt.picType = PICTYPE_BITMAP;
+
+				pt.bmp.hbitmap = png.Detach();
+
+				hr = OleCreatePictureIndirect(&pt, IID_IPictureDisp, TRUE, (LPVOID*)&pPic);
+
+				if (pPic)
+				{
+					*pPicDisp = pPic.Detach();
+				}
+			}
+		}
+
+		return hr;
+	}
+
+
+
+
 	STDMETHOD(GetImage2)(IDispatch* ribbonControl, IPictureDisp** ppdispImage)
 	{
 
@@ -153,18 +277,18 @@ public:
 		auto hr=image.Load(CreateStreamOnResource(MAKEINTRESOURCE(IDB_PNG1), _T("PNG")));
 		if (FAILED(hr)) return hr;
 
-		HBITMAP hbm = (HBITMAP)imgage.Detach();
-		if (hbm)
-		{
+		HBITMAP hbm = (HBITMAP)image.Detach();
+		//if (hbm)
+		//{
 			// Use the factory implemented by the framework to produce an IUIImage.
-			hr = m_pifbFactory->CreateImage(hbm, UI_OWNERSHIP_TRANSFER, ppimg);
-			if (FAILED(hr))
-			{
-				DeleteObject(hbm);
-			}
-		}
+			//hr = m_pifbFactory->CreateImage(hbm, UI_OWNERSHIP_TRANSFER, ppimg);
+			//if (FAILED(hr))
+			//{
+				//DeleteObject(hbm);
+			//}
+		//}
 
-		CComPtr<IPictureDisp> pPic(image.);
+		//CComPtr<IPictureDisp> pPic(image.);
 	
 		return S_OK;
 	}
@@ -175,17 +299,16 @@ public:
 		IID IID_Picture;
 		HRESULT hRes = E_FAIL;
 		IIDFromString(L"{7BF80980-BF32-101A-8BBB-00AA00300CAB}", &IID_Picture);
-		HANDLE hBtnImg = LoadImage(hModule, MAKEINTRESOURCE(IDB_BITMAP1), IMAGE_BITMAP, 64, 64, LR_DEFAULTSIZE);
+		HANDLE hBtnImg = LoadImage(hModule, MAKEINTRESOURCE(IDB_BITMAP2), IMAGE_BITMAP, 64, 64, LR_DEFAULTSIZE);
 		if (!hBtnImg) return E_POINTER;
 
 		PICTDESC picDesc = { 0 };
 		picDesc.bmp.hbitmap = (HBITMAP)hBtnImg;
-		picDesc.picType = PICTURE_TRANSPARENT;
-		//picDesc.picType = PICTYPE_BITMAP;
+		picDesc.picType = PICTYPE_BITMAP;
 		picDesc.cbSizeofstruct = sizeof(picDesc);
 		CComPtr<IPictureDisp> pPic;
 
-		CImage image;
+		//CImage image;
 
 
 
