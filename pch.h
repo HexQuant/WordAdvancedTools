@@ -22,7 +22,7 @@
     auto_rename auto_search raw_interfaces_only rename_namespace("Office")
 
 #import "libid:00020905-0000-0000-C000-000000000046"\
-    auto_rename auto_search raw_interfaces_only rename_namespace("Word")
+    auto_rename auto_search raw_native_types /* raw_interfaces_only */ rename_namespace("Word")
 
 //using namespace AddinDesign;
 using namespace Office;

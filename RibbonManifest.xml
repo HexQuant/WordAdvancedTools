@@ -3,11 +3,11 @@
 	<ribbon startFromScratch="false">
 		<tabs>
 			<tab id="watTab" label="Advanced Tools">
-				<group id="RevisionGroup" getLabel="GetLabel">
+				<group id="RevisionGroup" label="Revision">
 					<button id="AddRevisionButton" size="large" label="Add Revision" onAction="OnAddRevisionButton" getImage="GetImage3"/>
-					<toggleButton id="LinkRevisionButton" onAction="OnLinkRevisionButton" size="large" getLabel="GetLabel" getImage="GetImage3" getScreentip="GetScreentip"/>
+					<toggleButton id="LinkRevisionButton" onAction="OnLinkRevisionButton" size="large" label="Pin Field" getImage="GetImage3" getScreentip="GetScreentip"/>
 					<separator id="RevisionSeparator"/> 
-					<button id="RemoveAllRevisionButton" onAction="OnRemoveAllRevisionButton" size="large" getLabel="GetLabel" getImage="GetImage3" getScreentip="GetScreentip"/>
+					<button id="RemoveAllRevisionButton" onAction="OnRemoveAllRevisionButton" size="large" label="Remove All" getImage="GetImage3" getScreentip="GetScreentip"/>
 					<dialogBoxLauncher>
 						<button id="RevisionSettingsButton" onAction="OnRevisionSettingsButton" getLabel="GetLabel" getScreentip="GetScreentip" />
 					</dialogBoxLauncher>
