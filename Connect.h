@@ -8,6 +8,7 @@
 
 #include "WordAdvancedTools_i.h"
 
+#include "RevisionMacros.h"
 #include "RevisionSettingsDialog.h"
 
 
@@ -86,88 +87,9 @@ public:
 
 	STDMETHOD(OnAddRevisionButton)(IDispatch* ribbon)
 	{
-		
-		auto doc = spApp->ActiveDocument;
-		spApp->ScreenUpdating = False;
-		
-		BSTR m = SysAllocString(L"RevStyle");
-		VARIANT revStyleName;
-		revStyleName.bstrVal = m;
-		revStyleName.vt = VT_BSTR;
-		CComPtr<Style> revStyle;
-		auto r = doc->Styles->raw_Add(m, 0, &revStyle);
-		if (r == S_OK)
-		{
-			revStyle->Font->Name = SysAllocString(L"Times New Roman");
-			revStyle->Font->Size = 12;
-			revStyle->Font->Shading->Texture = wdTextureNone;
-			revStyle->Font->Shading->ForegroundPatternColor = wdColorAutomatic;
-			revStyle->Font->Shading->BackgroundPatternColor = wdColorAutomatic;
-		}
-
-		auto selection = spApp->Selection;
-		auto rang = selection->Range;
-		auto start = rang->Start;
-		auto end = rang->End;
-		CComVariant var1 = CComVariant(start);
-		CComVariant var2 = CComVariant(start+1);
-		auto frang = doc->Range(&(VARIANT)var1, &(VARIANT)var2);
-		auto pagesetup = rang->PageSetup;
-		auto PageTopPosition = pagesetup->TopMargin;
-		auto PageBottomMargin = pagesetup->BottomMargin;
-		auto PageBottomPosition = pagesetup->PageHeight - PageBottomMargin;
-		
-		auto orientation = pagesetup->Orientation;
-		auto papersize = pagesetup->PaperSize;
-
-		float PortraitFirstMargin, PortraitSecondMargin,
-			LandscapeFirstMargin, LandscapeSecondMargin;
-
-		float width = 0 , left = 0, heigth = 20;
-
-		if ((orientation == wdOrientLandscape && papersize == wdPaperA3)	||
-			(orientation == wdOrientPortrait && papersize == wdPaperA4))
-		{
-			width = spApp->MillimetersToPoints(10);
-			heigth = spApp->MillimetersToPoints(10);
-		}
-		else
-		{
-			width = spApp->MillimetersToPoints(10);
-			heigth = spApp->MillimetersToPoints(10);
-		}
-		VARIANT firstPosition;
-		WdInformation t = wdVerticalPositionRelativeToPage;
-		firstPosition = rang->Information[t];
-		
-		auto shape = doc->Shapes->AddTextbox(msoTextOrientationHorizontal ,left, 10, width, heigth, NULL);
-		shape->Line->Visible = msoFalse;
-
-		auto textFrame = shape->TextFrame;
-
-		textFrame->MarginTop = 0;
-		textFrame->MarginBottom = 0;
-		textFrame->MarginLeft = 0;
-		textFrame->MarginRight = 0;
-
-		auto textRange = textFrame->TextRange;
-
-		textRange->PutStyle(&revStyleName);
-
-		textRange->Text = SysAllocString(L"Test");
-		textRange->ParagraphFormat->FirstLineIndent = 0;
-		textRange->ParagraphFormat->Alignment = wdAlignParagraphRight;
-		textRange->Borders->Item(wdBorderTop)->LineStyle = wdLineStyleNone;
-		textRange->Borders->Item(wdBorderLeft)->LineStyle = wdLineStyleNone;
-		textRange->Borders->Item(wdBorderBottom)->LineStyle = wdLineStyleNone;
-		textRange->Borders->Item(wdBorderRight)->LineStyle = spApp->Options->DefaultBorderLineStyle;
-		textRange->Borders->Item(wdBorderRight)->LineWidth = spApp->Options->DefaultBorderLineWidth;
-
-
-		spApp->ScreenUpdating = True;
-		spApp->ScreenRefresh();
-
-		//MessageBoxW(NULL, MyBstr, L"Native Addin", MB_OK);
+		auto ar = RevisionMacros(spApp,  SysAllocString(L"1"));
+		ar.Insert();
+			//MessageBoxW(NULL, MyBstr, L"Native Addin", MB_OK);
 		//Office::MsoLanguageID lang;
 
 		//spApp->get_Language(&lang);

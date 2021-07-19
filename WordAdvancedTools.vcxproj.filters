@@ -66,9 +66,6 @@
     <ClCompile Include="RevisionSettingsDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RevisionMacros.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WordAdvancedTools.rc">
