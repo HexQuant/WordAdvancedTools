@@ -68,13 +68,25 @@ END_COM_MAP()
 	{
 	}
 
+	RevisionMacros *ar = nullptr;
+
 public:
 
 	//Ribbon Callbacks
 
+	STDMETHOD(OnLoad)(IDispatch* ribbon)
+	{
+		if (ar == nullptr)
+		{
+			ar = new RevisionMacros(spApp);
+		}
+
+		return S_OK;
+	}
 	STDMETHOD(OnRevisionSettingsButton)(IDispatch* ribbon)
 	{
 		CRevisionSettingsDialog Dialog;
+		Dialog.rm = ar;
 		Dialog.DoModal();
 
 		return S_OK;
@@ -87,11 +99,10 @@ public:
 
 	STDMETHOD(OnAddRevisionButton)(IDispatch* ribbon)
 	{
-		auto ar = RevisionMacros(spApp,  SysAllocString(L"1"));
-		ar.Insert();
-			//MessageBoxW(NULL, MyBstr, L"Native Addin", MB_OK);
+		
+		ar->Insert();
+		//MessageBoxW(NULL, MyBstr, L"Native Addin", MB_OK);
 		//Office::MsoLanguageID lang;
-
 		//spApp->get_Language(&lang);
 		//WORD lang2 = MAKELANGID(PRIMARYLANGID(lang), SUBLANG_DEFAULT);
 

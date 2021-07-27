@@ -8,75 +8,76 @@
 class RevisionMacros
 {
 private:
-	_Application *spApp;
-	BSTR Text;
-	BSTR StyleName;
+	Word::_Application *spApp;
 
 	float m_PortraitFirstMargin;
 	float m_PortraitSecondMargin;
 	float m_LandscapeFirstMargin;
 	float m_LandscapeSecondMargin;
 
-	void putPortraitFirstMargin(const float prop)
-	{
-		m_PortraitFirstMargin = spApp->MillimetersToPoints(prop);
-	}
-	
-	float getPortraitFirstMargin()
-	{
-		return spApp->PointsToMillimeters(m_PortraitFirstMargin);
-	}
-
-	void putPortraitSecondMargin(const float prop)
-	{
-		m_PortraitSecondMargin = spApp->MillimetersToPoints(prop);
-	}
-	
-	float getPortraitSecondMargin()
-	{
-		return spApp->PointsToMillimeters(m_PortraitSecondMargin);
-	}
-
-	void  putLandscapeFirstMargin(const float prop)
-	{
-		 m_LandscapeFirstMargin = spApp->MillimetersToPoints(prop);
-	}
-	
-	float  getLandscapeFirstMargin()
-	{
-		return spApp->PointsToMillimeters(m_LandscapeFirstMargin);
-	}
-
-	void  putLandscapeSecondMargin(const float prop)
-	{
-		 m_LandscapeSecondMargin= spApp->MillimetersToPoints(prop);
-	}
-	
-	float  getLandscapeSecondMargin()
-	{
-		return spApp->PointsToMillimeters( m_LandscapeSecondMargin);
-	}
-
 public:
+	BSTR Text;
+	BSTR StyleName;
 	bool IsField = False;
 	bool SilensStyleAppend = False;
+
+	void putPortraitFirstMargin(const UINT prop)
+	{
+		m_PortraitFirstMargin = spApp->MillimetersToPoints(static_cast<float>(prop));
+	}
+	
+	UINT getPortraitFirstMargin()
+	{
+		return static_cast<UINT>(spApp->PointsToMillimeters(m_PortraitFirstMargin));
+	}
+
+	void putPortraitSecondMargin(const UINT prop)
+	{
+		m_PortraitSecondMargin = spApp->MillimetersToPoints(static_cast<float>(prop));
+	}
+	
+	UINT getPortraitSecondMargin()
+	{
+		return static_cast<UINT>(spApp->PointsToMillimeters(m_PortraitSecondMargin));
+	}
+
+	void putLandscapeFirstMargin(const UINT prop)
+	{
+		m_LandscapeFirstMargin = spApp->MillimetersToPoints(static_cast<float>(prop));
+	}
+	
+	UINT getLandscapeFirstMargin()
+	{
+		return static_cast<UINT>(spApp->PointsToMillimeters(m_LandscapeFirstMargin));
+	}
+
+	void putLandscapeSecondMargin(const UINT prop)
+	{
+		m_LandscapeSecondMargin = spApp->MillimetersToPoints(static_cast<float>(prop));
+	}
+	
+	UINT getLandscapeSecondMargin()
+	{
+		return static_cast<UINT>(spApp->PointsToMillimeters(m_LandscapeSecondMargin));
+	}
 
 	__declspec(property(
 		get = getPortraitFirstMargin,
 		put = putPortraitFirstMargin))
-		float PortraitFirstMargin;
+		UINT PortraitFirstMargin;
 	__declspec(property(
 		get = getPortraitSecondMargin,
 		put = putPortraitSecondMargin))
-		float PortraitSecondMargin;
+		UINT PortraitSecondMargin;
 	__declspec(property(
 		get = getLandscapeFirstMargin,
 		put = putLandscapeFirstMargin))
-		float LandscapeFirstMargin;
+		UINT LandscapeFirstMargin;
 	__declspec(property(
 		get = getLandscapeSecondMargin,
 		put = putLandscapeSecondMargin))
-		float LandscapeSecondMargin;
+		UINT LandscapeSecondMargin;
+
 	//__declspec(property(
 	//	get = getStyleName,
 	//	put = putStyleName))
@@ -87,16 +88,30 @@ public:
 	//	Word::Bookmark* Bookmark;
 
 
-	RevisionMacros(_Application *App, BSTR Text)
+	RevisionMacros(Word::_Application *App)
 	{
 
 		this->spApp = App;
-		this->Text = Text;
+
+		Text = SysAllocString(L"1");
+		StyleName = SysAllocString(L"RevStyle");
 
 		this->PortraitFirstMargin = 0;
 		this->PortraitSecondMargin = 20;
 		this->LandscapeFirstMargin = 0;
 		this->LandscapeSecondMargin = 5;
+	}
+	~RevisionMacros()
+	{
+		if (this->Text != NULL)
+		{
+			SysFreeString(this->Text);
+		}
+		if (this->StyleName != NULL)
+		{
+			SysFreeString(this->StyleName);
+		}
+
 	}
 
 	void Insert()
@@ -104,21 +119,19 @@ public:
 		const auto doc = this->spApp->ActiveDocument;
 		this->spApp->ScreenUpdating = False;
 
-		BSTR m = SysAllocString(L"RevStyle");
 		VARIANT revStyleName;
-		revStyleName.bstrVal = m;
+		revStyleName.bstrVal = this->StyleName;
 		revStyleName.vt = VT_BSTR;
-		//CComPtr<Style> revStyle;
 		Style *revStyle;
-		auto r = doc->Styles->raw_Add(m, 0, &revStyle);
+		auto r = doc->Styles->raw_Add(StyleName, 0, &revStyle);
 		if (r == S_OK)
 		{
 			revStyle->Font->Name = SysAllocString(L"Times New Roman");
 			revStyle->AutomaticallyUpdate = False;
 			revStyle->Font->Size = 12;
-			revStyle->Font->Shading->Texture = wdTextureNone;
-			revStyle->Font->Shading->ForegroundPatternColor = wdColorAutomatic;
-			revStyle->Font->Shading->BackgroundPatternColor = wdColorAutomatic;
+			revStyle->Font->Shading->Texture = WdTextureIndex::wdTextureNone;
+			revStyle->Font->Shading->ForegroundPatternColor = WdColor::wdColorAutomatic;
+			revStyle->Font->Shading->BackgroundPatternColor = WdColor::wdColorAutomatic;
 		}
 
 		auto selection = this->spApp->Selection;
@@ -157,8 +170,8 @@ public:
 			width = this->m_LandscapeSecondMargin - left;
 		}
 
-		auto firstPosition = rang->Information[wdVerticalPositionRelativeToPage];
-		auto endPosition = erang->Information[wdVerticalPositionRelativeToPage];
+		auto firstPosition = rang->Information[WdInformation::wdVerticalPositionRelativeToPage];
+		auto endPosition = erang->Information[WdInformation::wdVerticalPositionRelativeToPage];
 		auto endCharHeight = erang->Font->Size * 1.152083417;
 
 		heigth = endPosition.fltVal + endCharHeight - firstPosition.fltVal;
