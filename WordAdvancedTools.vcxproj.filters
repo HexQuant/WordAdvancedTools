@@ -43,7 +43,10 @@
     <ClInclude Include="RevisionSettingsDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RevisionMacros.h">
+    <ClInclude Include="RevisionMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BookmarkMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

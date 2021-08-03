@@ -7,8 +7,8 @@
 /* at Tue Jan 19 06:14:07 2038
  */
 /* Compiler settings for WordAdvancedTools.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.01.0622 
-    protocol : dce , ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.01.0622 
+    protocol : all , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -237,6 +237,9 @@ EXTERN_C const IID IID_IRibbonCallback;
         virtual HRESULT STDMETHODCALLTYPE OnAddRevisionButton( 
             /* [in] */ IDispatch *ribbonControl) = 0;
         
+        virtual HRESULT STDMETHODCALLTYPE OnPinBookmarkButton( 
+            /* [in] */ IDispatch *ribbonControl) = 0;
+        
         virtual HRESULT STDMETHODCALLTYPE OnRevisionSettingsButton( 
             /* [in] */ IDispatch *ribbonControl) = 0;
         
@@ -324,6 +327,10 @@ EXTERN_C const IID IID_IRibbonCallback;
             IRibbonCallback * This,
             /* [in] */ IDispatch *ribbonControl);
         
+        HRESULT ( STDMETHODCALLTYPE *OnPinBookmarkButton )( 
+            IRibbonCallback * This,
+            /* [in] */ IDispatch *ribbonControl);
+        
         HRESULT ( STDMETHODCALLTYPE *OnRevisionSettingsButton )( 
             IRibbonCallback * This,
             /* [in] */ IDispatch *ribbonControl);
@@ -394,6 +401,9 @@ EXTERN_C const IID IID_IRibbonCallback;
 
 #define IRibbonCallback_OnAddRevisionButton(This,ribbonControl)	\
     ( (This)->lpVtbl -> OnAddRevisionButton(This,ribbonControl) ) 
+
+#define IRibbonCallback_OnPinBookmarkButton(This,ribbonControl)	\
+    ( (This)->lpVtbl -> OnPinBookmarkButton(This,ribbonControl) ) 
 
 #define IRibbonCallback_OnRevisionSettingsButton(This,ribbonControl)	\
     ( (This)->lpVtbl -> OnRevisionSettingsButton(This,ribbonControl) ) 

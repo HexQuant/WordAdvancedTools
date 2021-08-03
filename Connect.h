@@ -8,7 +8,7 @@
 
 #include "WordAdvancedTools_i.h"
 
-#include "RevisionMacros.h"
+#include "RevisionMgr.h"
 #include "RevisionSettingsDialog.h"
 
 
@@ -68,7 +68,7 @@ END_COM_MAP()
 	{
 	}
 
-	RevisionMacros *ar = nullptr;
+	RevisionMgr *ar = nullptr;
 
 public:
 
@@ -78,7 +78,7 @@ public:
 	{
 		if (ar == nullptr)
 		{
-			ar = new RevisionMacros(spApp);
+			ar = new RevisionMgr(spApp);
 		}
 
 		return S_OK;
@@ -97,6 +97,13 @@ public:
 		return S_OK;
 	}
 
+
+	STDMETHOD(OnPinBookmarkButton)(IDispatch* ribbon)
+	{
+		ar->PinBookmark();
+
+		return S_OK;
+	}
 	STDMETHOD(OnAddRevisionButton)(IDispatch* ribbon)
 	{
 		
@@ -185,7 +192,7 @@ public:
 		{	
 			resID = IDB_PNG2;
 		}
-		if (bstr=="LinkRevisionButton")
+		if (bstr=="PinBookmarkButton")
 		{	
 			resID = IDB_PNG3;
 		}

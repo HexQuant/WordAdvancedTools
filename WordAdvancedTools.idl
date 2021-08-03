@@ -46,6 +46,7 @@ library WordAdvancedToolsLib
 interface IRibbonCallback : IDispatch {
 	//[id(42), helpstring("Button Callback")]
 	HRESULT OnAddRevisionButton([in]IDispatch* ribbonControl);
+	HRESULT OnPinBookmarkButton([in]IDispatch* ribbonControl);
 	HRESULT OnRevisionSettingsButton([in]IDispatch* ribbonControl);
 	HRESULT OnRemoveAllRevisionButton([in]IDispatch* ribbonControl);
 	HRESULT GetLabel([in]IDispatch* ribbonControl, [out, retval]BSTR* Label);

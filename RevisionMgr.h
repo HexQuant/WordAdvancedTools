@@ -5,11 +5,12 @@
 
 #include "pch.h"
 
-class RevisionMacros
+class RevisionMgr
 {
 private:
 	Word::_Application *spApp;
 
+	Word::Bookmark* m_Bookmark;
 	float m_PortraitFirstMargin;
 	float m_PortraitSecondMargin;
 	float m_LandscapeFirstMargin;
@@ -19,6 +20,7 @@ public:
 	BSTR Text;
 	BSTR StyleName;
 	bool IsField = False;
+	bool IsBookmakr = False;
 	bool SilensStyleAppend = False;
 
 	void putPortraitFirstMargin(const UINT prop)
@@ -78,17 +80,28 @@ public:
 		put = putLandscapeSecondMargin))
 		UINT LandscapeSecondMargin;
 
+	Word::Bookmark* getBookmark()
+	{
+		return m_Bookmark;
+	}
+
+	void putBookmark(Word::Bookmark * bookmark)
+	{
+		this->m_Bookmark = bookmark;
+	}
+
+	__declspec(property(
+		get = getBookmark,
+		put = putBookmark))
+		Word::Bookmark* Bookmark;
+
+
 	//__declspec(property(
 	//	get = getStyleName,
 	//	put = putStyleName))
 	//	std::string StyleName;
-	//__declspec(property(
-	//	get = getBookmark,
-	//	put = putBookmark))
-	//	Word::Bookmark* Bookmark;
 
-
-	RevisionMacros(Word::_Application *App)
+	RevisionMgr(Word::_Application *App)
 	{
 
 		this->spApp = App;
@@ -101,17 +114,41 @@ public:
 		this->LandscapeFirstMargin = 0;
 		this->LandscapeSecondMargin = 5;
 	}
-	~RevisionMacros()
+	~RevisionMgr()
 	{
-		if (this->Text != NULL)
+		if (this->Text != NULL) [[likely]]
 		{
 			SysFreeString(this->Text);
 		}
-		if (this->StyleName != NULL)
+		if (this->StyleName != NULL) [[likely]]
 		{
 			SysFreeString(this->StyleName);
 		}
 
+	}
+	bool PinBookmark()
+	{
+		const auto doc = this->spApp->ActiveDocument;
+		auto bookmark_count = spApp->Selection->Bookmarks->Count;
+		if (bookmark_count == 1)
+		{
+			VARIANT i;
+			i.uintVal = 1;
+			i.vt = VT_UINT;
+			this->Bookmark = spApp->Selection->Bookmarks->Item(&i);
+			this->IsBookmakr = true;
+			return true;
+		}
+		else if (bookmark_count == 0)
+		{
+			MessageBoxW(NULL, L"No bookmarks found in selection", L"Bookmark", MB_OK | MB_ICONWARNING);
+			return false;
+		}
+		else
+		{
+			MessageBoxW(NULL, L"There is more than one bookmark in the selection", L"Bookmark", MB_OK | MB_ICONWARNING);
+			return false;
+		}
 	}
 
 	void Insert()
@@ -124,7 +161,7 @@ public:
 		revStyleName.vt = VT_BSTR;
 		Style *revStyle;
 		auto r = doc->Styles->raw_Add(StyleName, 0, &revStyle);
-		if (r == S_OK)
+		if (r == S_OK) [[unlikely]]
 		{
 			revStyle->Font->Name = SysAllocString(L"Times New Roman");
 			revStyle->AutomaticallyUpdate = False;
@@ -194,7 +231,35 @@ public:
 
 		textRange->PutStyle(&revStyleName);
 
-		textRange->Text = this->Text;
+		if (IsBookmakr)
+		{
+			ATL::CComVariant s (this->Bookmark);
+			ATL::CComVariant g( WdReferenceType::wdRefTypeBookmark );
+			ATL::CComVariant t( true );
+
+			textRange->InsertCrossReference(&g, WdReferenceKind::wdContentText, &s, &t);
+
+		}
+		else
+		{
+			if (IsField)
+			{
+				VARIANT b {WdFieldType::wdFieldEmpty};
+				VARIANT s;
+				s.bstrVal = this->Text;
+				s.vt = VT_BSTR;
+					
+				doc->Fields->Add(textRange, &b, &s);
+				
+			}
+			else
+			{
+				textRange->Text = this->Text;
+			}
+		}
+
+
+		
 
 		textRange->ParagraphFormat->FirstLineIndent = 0;
 		textRange->ParagraphFormat->Alignment = wdAlignParagraphRight;
@@ -203,7 +268,7 @@ public:
 		textRange->Borders->Item(wdBorderBottom)->LineStyle = wdLineStyleNone;
 		textRange->Borders->Item(wdBorderRight)->LineStyle = this->spApp->Options->DefaultBorderLineStyle;
 		textRange->Borders->Item(wdBorderRight)->LineWidth = this->spApp->Options->DefaultBorderLineWidth;
-
+		textRange->Borders->Item(wdBorderRight)->Color = this->spApp->Options->DefaultBorderColor;
 
 		this->spApp->ScreenUpdating = True;
 		this->spApp->ScreenRefresh();

@@ -3,7 +3,7 @@
 #include "resource.h"
 #include <atlhost.h>
 
-#include "RevisionMacros.h"
+#include "RevisionMgr.h"
 
 using namespace ATL;
 
@@ -14,7 +14,7 @@ class CRevisionSettingsDialog :
 {
 public:
 
-	RevisionMacros* rm;
+	RevisionMgr* rm;
 
 	CRevisionSettingsDialog()
 	{

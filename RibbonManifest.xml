@@ -5,12 +5,23 @@
 			<tab id="watTab" label="Advanced Tools">
 				<group id="RevisionGroup" label="Revision">
 					<button id="AddRevisionButton" size="large" label="Add Revision" onAction="OnAddRevisionButton" getImage="GetImage3"/>
-					<toggleButton id="LinkRevisionButton" onAction="OnLinkRevisionButton" size="large" label="Pin Field" getImage="GetImage3" getScreentip="GetScreentip"/>
+					<button id="PinBookmarkButton" onAction="OnPinBookmarkButton" size="large" label="Pin Bookmark" getImage="GetImage3" getScreentip="GetScreentip"/>
 					<separator id="RevisionSeparator"/> 
 					<button id="RemoveAllRevisionButton" visible="false" onAction="OnRemoveAllRevisionButton" size="large" label="Remove All" getImage="GetImage3" getScreentip="GetScreentip"/>
 					<dialogBoxLauncher>
 						<button id="RevisionSettingsButton" onAction="OnRevisionSettingsButton" getLabel="GetLabel" getScreentip="GetScreentip" />
 					</dialogBoxLauncher>
+				</group>
+				<group id ="BookmarkGroup" label="Bookmarks">
+					<splitButton id="Bookmark" size="normal" >
+						<button id="AddBookmarkButton" label="Bookmark" imageMso="BookmarkInsert" onAction="AddBookmarkCommand" supertip="Для выделенного текста создаёт закладку с идентификатором этого текста" />
+						<menu id="jkl">
+							<button id="AddBookmarksButton" label="Smart Bookmarks" imageMso="BookmarkInsert" onAction="AddBookmarksCommand"/>
+						</menu>
+					</splitButton>
+					<button id="AddRefByID" label="Ref by ID" onAction="AddRefByIDCommand" imageMso="CrossReferenceInsert" supertip="Вставить перекрестную ссылку на основе совпадения выделенного текста и идентификатора закладки" />
+					<button id="AddRefByText" label="Ref by content" onAction="AddRefByTextCommand" imageMso="CrossReferenceInsert" supertip="Вставить перекрестную ссылку на основе совпадения выделенного текста и текста закладки" />
+					<button id="GetBookmarkIDButton" label="Bookmarks IDs" imageMso="HtmlPreviousBookmark"   onAction="GetBookmarkIDCommand" supertip="Выводит и копирует в буфер обмена ID закладки к которой принадлежит выдленный текст."/>
 				</group>
 				<group id="HelpGroup" getLabel="GetLabel">
 					<button id="AboutButton" visible="false" onAction="OnAboutButton" size="large" getLabel="GetLabel" getImage="GetImage3" getScreentip="GetScreentip"/>
